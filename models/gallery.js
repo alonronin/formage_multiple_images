@@ -7,17 +7,45 @@ var Schema = mongoose.Schema;
 var Types = Schema.Types;
 var _ = require('lodash');
 
-var FilepickerGalleryWidget = formage.widgets.Widget.extend({
+var FilepickerGalleryWidget = formage.widgets.InputWidget.extend({
+    init: function (options) {
+        this._super('filepicker', options);
+        this.attrs['data-fp-button-class'] = "btn btn-primary";
+        this.attrs['data-fp-multiple'] = true;
+        this.attrs['data-fp-mimetypes'] = 'image/*';
+        this.attrs['onchange'] = 'gallery_on_change(event)';
+    },
+
     render: function (res) {
-        var value = this.value || [];
-        res.write('<input type="filepicker" data-fp-multiple data-fp-mimetypes="image/*" />');
+        this._super(res);
+
+        var script = "function gallery_on_change(e){ $(e.target).val( e.fpfiles); }";
+        res.write('<script>' + script + '</script>');
+    }
+});
+
+var FilepickerGalleryField = formage.fields.FilepickerField.extend({
+    init: function (options) {
+        options = options || {};
+        options.widget = FilepickerGalleryWidget;
+        this._super(options);
+    },
+    clean_value: function (req, callback) {
+        this._super(req, callback);
+    },
+    bind: function(){
+        this.value || (this.value = '');
+        this.value = JSON.stringify(this.value);
+    },
+    unbind: function () {
+        console.log(this.value);
     }
 });
 
 var schema = new Schema({
     navigation: { type: Types.ObjectId, ref: 'navigation' },
     title: { type: String },
-    pictures: {type: Types.Filepicker, widget: FilepickerGalleryWidget },
+    pictures: {type: Types.Mixed, formageField: FilepickerGalleryField },
     order: { type: Number, editable: false },
     show: { type: Boolean, default: true }
 });
