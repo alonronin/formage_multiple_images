@@ -54,32 +54,6 @@ var schema = new Schema({
     }
 });
 
-/*
-    Return site config and some other:
-        res.locals.config
-        res.locals.http_params
- */
-schema.statics.middleware = function() {
-    var config = this;
-    return function(req, res, next) {
-        var language = res.locals.language;
-
-        var q = config.findOne().where('language', language._id).lean().exec();
-        q.then(function(config) {
-            res.locals.http_params = {
-                query: req.query,
-                headers: req.headers,
-                body: req.body,
-                url: req.url,
-                debug: req.app.get('env') == 'development'
-            };
-
-            res.locals.config = config;
-            next();
-        }).end(next);
-    };
-};
-
 schema.formage = {
     list: ['language', 'site.name', 'site.logo'],
     list_populate: ['language'],

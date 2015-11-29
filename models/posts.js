@@ -54,45 +54,6 @@ schema.path('url').validate(function(v, callback){
     });
 }, 'url already exists');
 
-schema.statics.byNavigationId = function(){
-    var posts = this;
-    return function(res, cb){
-        var page = res.locals.page;
-
-        posts
-            .find()
-            .where('navigation', page._id)
-            .where('show', 1)
-            .sort({'order': 1})
-            .lean()
-            .exec(function(err, results){
-                if(results.length) res.locals.page.posts = {items :results};
-                cb(err);
-            })
-    }
-};
-
-schema.statics.latest = function(){
-    var posts = this;
-
-    return function(res, cb){
-        var menu = res.locals.menu;
-        var ids = _.pluck(menu.items, '_id');
-
-        posts
-            .findOne()
-            .in('navigation', ids)
-            .where('show', 1)
-            .sort({'_id': -1})
-            .lean()
-            .exec(function(err, result){
-                if(result) res.locals.latest_post = result;
-                cb(err);
-            });
-
-    }
-};
-
 schema.formage = {
     list: ['navigation', 'title', 'picture', 'url', 'show'],
     list_populate: ['navigation'],
