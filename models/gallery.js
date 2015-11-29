@@ -45,7 +45,7 @@ var FilepickerGalleryField = formage.fields.FilepickerField.extend({
 var schema = new Schema({
     navigation: { type: Types.ObjectId, ref: 'navigation' },
     title: { type: String },
-    pictures: {type: Types.Mixed, formageField: FilepickerGalleryField },
+    pictures: {type: Object, formageField: FilepickerGalleryField },
     order: { type: Number, editable: false },
     show: { type: Boolean, default: true }
 });
