@@ -44,7 +44,16 @@ function gallery_render(name){
     $.each(files, function(index){
         $container.append(
             $('<p />')
-                .append($('<img/>').attr('src', this.picture.url + '/convert?w=150&h=110').addClass('img-polaroid'))
+                .append(
+                    $('<span />')
+                        .append($('<img/>').attr('src', this.picture.url + '/convert?w=150&h=110').addClass('img-polaroid'))
+                        .attr('href', this.picture.url)
+                        .attr('target', '_blank')
+                        .css({ cursor: 'pointer '})
+                        .click(function(){
+                            window.open($(this).attr('href'));
+                        })
+                )
                 .append(
                     $('<button />')
                         .data('name', name)

@@ -29,7 +29,7 @@ var FilepickerGalleryWidget = formage.widgets.InputWidget.extend({
         res.write('<div id="gallery_'+ this.name +'" style="float:left; margin-top: 20px;">');
 
         _.forEach(this.value, function(item, index){
-            res.write(_.template('<p><img class="img-polaroid" src="${ url }/convert?w=150&h=110"/> <button class="btn btn-danger delete_picture" data-name="'+ this.name +'" data-index="'+ index +'">Delete</button></p>')(item.picture));
+            res.write(_.template('<p><a href="${ url }" target="_blank"><img class="img-polaroid" src="${ url }/convert?w=150&h=110"/></a> <button class="btn btn-danger delete_picture" data-name="'+ this.name +'" data-index="'+ index +'">Delete</button></p>')(item.picture));
         }, this);
 
         res.write('</div>');
