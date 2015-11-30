@@ -75,12 +75,12 @@ function gallery_render(name){
                     $('<div />')
                         .addClass('gallery-list-buttons')
                         .append(
-                            $('<a />')
+                            $('<span />')
                                 .addClass('btn gallery-drag')
                                 .append($('<i />').addClass('icon-resize-vertical'))
                         )
                         .append(
-                            $('<a />')
+                            $('<span />')
                                 .data('name', name)
                                 .data('index', index)
                                 .addClass('btn delete_picture')
@@ -93,7 +93,7 @@ function gallery_render(name){
 }
 
 $(function(){
-    $('body').on('click', 'a.delete_picture', function(e){
+    $('body').on('click', 'span.delete_picture', function(e){
         e.preventDefault();
 
         gallery_delete_item($(this).data().name, $(this).data().index);
