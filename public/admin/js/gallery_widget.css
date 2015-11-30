@@ -1,0 +1,24 @@
+.gallery-container {
+    margin: 20px 30px 10px 90px;
+}
+
+.gallery-container ul {
+    list-style-type: none;
+}
+
+.gallery-container li {
+    position: relative;
+    background: #eee;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.gallery-container li  .gallery-list-buttons {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.gallery-container .gallery-item-text {
+    margin-left: 20px;
+}

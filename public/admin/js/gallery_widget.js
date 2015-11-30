@@ -34,16 +34,30 @@ function gallery_delete_all(name){
     gallery_render(name);
 }
 
+function gallery_sort(name){
+    var $gallery = $('#id_'+ name );
+    var $files = $('#gallery_' + name + ' ul li');
+
+    var value = [];
+    $.each($files, function(){
+        value.push($(this).data().item);
+    });
+
+    $gallery.val(JSON.stringify(value));
+}
+
 function gallery_render(name){
     var $gallery = $('#id_'+ name );
     var files = JSON.parse($gallery.val());
-    var $container = $('#gallery_' + name);
+    var $container = $('#gallery_' + name + ' ul');
 
     $container.empty();
 
     $.each(files, function(index){
         $container.append(
-            $('<p />')
+            $('<li />')
+                .data('item', this)
+                .data('name', name)
                 .append(
                     $('<span />')
                         .append($('<img/>').attr('src', this.picture.url + '/convert?w=150&h=110').addClass('img-polaroid'))
@@ -55,18 +69,31 @@ function gallery_render(name){
                         })
                 )
                 .append(
-                    $('<button />')
-                        .data('name', name)
-                        .data('index', index)
-                        .addClass('btn btn-danger delete_picture')
-                        .text('Delete'))
+                    $('<span />').addClass('gallery-item-text').text(this.picture.filename)
+                )
+                .append(
+                    $('<div />')
+                        .addClass('gallery-list-buttons')
+                        .append(
+                            $('<a />')
+                                .addClass('btn gallery-drag')
+                                .append($('<i />').addClass('icon-resize-vertical'))
+                        )
+                        .append(
+                            $('<a />')
+                                .data('name', name)
+                                .data('index', index)
+                                .addClass('btn delete_picture')
+                                .append($('<i />').addClass('icon-remove'))
+                        )
+                )
         );
 
     })
 }
 
 $(function(){
-    $('body').on('click', 'button.delete_picture', function(e){
+    $('body').on('click', 'a.delete_picture', function(e){
         e.preventDefault();
 
         gallery_delete_item($(this).data().name, $(this).data().index);
@@ -76,5 +103,14 @@ $(function(){
         e.preventDefault();
 
         gallery_delete_all($(this).data().name);
-    })
+    });
+
+    $('.gallery-container ul').sortable({
+        axis: 'y',
+        handle: '.gallery-drag',
+        opacity: 0.8,
+        update: function(e, ui){
+            gallery_sort(ui.item.data().name);
+        }
+    }).disableSelection();
 });

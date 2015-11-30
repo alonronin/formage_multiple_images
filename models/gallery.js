@@ -21,18 +21,10 @@ var FilepickerGalleryWidget = formage.widgets.InputWidget.extend({
 
         res.write('<input type="filepicker" data-fp-button-class="btn btn-primary" data-fp-multiple="true" data-fp-mimetype="image/*" onchange="gallery_onchange(event, \''+ this.name+'\')" />');
         res.write('<button class="btn btn-danger delete_all_pictures" data-name="'+ this.name +'">Delete All</button>');
-        res.write('<br>');
+        res.write('<div id="gallery_'+ this.name +'" class="gallery-container clearfix"><ul></ul></div>');
 
-        var script = "";
+        var script = "$(function(){ gallery_render('"+ this.name +"') })";
         res.write('<script>'+ script +'</script>');
-
-        res.write('<div id="gallery_'+ this.name +'" style="float:left; margin-top: 20px;">');
-
-        _.forEach(this.value, function(item, index){
-            res.write(_.template('<p><a href="${ url }" target="_blank"><img class="img-polaroid" src="${ url }/convert?w=150&h=110"/></a> <button class="btn btn-danger delete_picture" data-name="'+ this.name +'" data-index="'+ index +'">Delete</button></p>')(item.picture));
-        }, this);
-
-        res.write('</div>');
     }
 });
 
@@ -43,6 +35,7 @@ var FilepickerGalleryField = formage.fields.FilepickerField.extend({
         this._super(options);
 
         this.header_lines || (this.header_lines = []);
+        this.header_lines.push('<link rel="stylesheet" href="/admin/js/gallery_widget.css">');
         this.header_lines.push('<script src="/admin/js/gallery_widget.js"></script>');
     },
     bind: function(data){
